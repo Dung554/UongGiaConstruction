@@ -1,5 +1,6 @@
 // src/components/Projects.tsx
 import { MapPin } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { useInView } from '../hooks/useInView';
 
 interface Project {
@@ -10,6 +11,7 @@ interface Project {
 }
 
 export default function Projects() {
+  const navigate = useNavigate();
   const { ref, isInView } = useInView({ threshold: 0.1 });
 
   const projects: Project[] = [
@@ -62,11 +64,11 @@ export default function Projects() {
         </div>
 
         <div className={`text-center mt-12 ${isInView ? 'animate-fade-in-up' : 'opacity-0'}`}>
-          <button className="bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition transform hover:scale-105">
+          <button onClick={() => navigate('/projects')} className="bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition transform hover:scale-105">
             Xem tất cả dự án
           </button>
         </div>
       </div>
     </section>
   );
-}
+} 
