@@ -15,7 +15,7 @@ export default function Hero() {
           backgroundAttachment: 'fixed'
         }}
       >
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-900/60 to-blue-800/40"></div>
+        <div className="absolute inset-0 bg-linear-to-r from-blue-900/60 to-blue-800/40"></div>
       </div>
 
       {/* Content */}

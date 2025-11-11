@@ -18,8 +18,8 @@ export default function Header() {
         </button>
 
         <ul className={`${isOpen ? 'flex' : 'hidden'} md:flex gap-8 absolute md:static top-16 left-0 right-0 md:gap-8 flex-col md:flex-row bg-blue-900 md:bg-transparent p-4 md:p-0`}>
-          <li><a href="#" className="hover:text-blue-300 transition">Trang chủ</a></li>
-          <li><a href="#" className="hover:text-blue-300 transition">Dự án</a></li>
+          <li><a href="/" className="hover:text-blue-300 transition">Trang chủ</a></li>
+          <li><a href="projects" className="hover:text-blue-300 transition">Dự án</a></li>
           <li><a href="#" className="hover:text-blue-300 transition">Dịch vụ</a></li>
           <li><a href="#" className="hover:text-blue-300 transition">Liên hệ</a></li>
         </ul>
