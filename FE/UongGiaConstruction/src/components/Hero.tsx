@@ -5,6 +5,16 @@ import heroImg from '../assets/herosection.jpg';
 export default function Hero() {
   const { ref, isInView } = useInView({ threshold: 0.3 });
 
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
+    }
+  };
+
   return (
     <section ref={ref} className="relative w-full h-screen bg-cover bg-center overflow-hidden">
       {/* Background image với overlay */}
@@ -34,10 +44,16 @@ export default function Hero() {
           </p>
 
           <div className={`flex flex-col sm:flex-row gap-4 justify-center ${isInView ? 'animate-bounce-in delay-300' : 'opacity-0'}`}>
-            <button className="bg-white text-blue-900 px-8 py-4 rounded-lg font-semibold hover:bg-blue-50 transition transform hover:scale-105 shadow-lg">
+            <button 
+              onClick={() => scrollToSection('overview')}
+              className="bg-white text-blue-900 px-8 py-4 rounded-lg font-semibold hover:bg-blue-50 transition transform hover:scale-105 shadow-lg"
+            >
               Tìm hiểu thêm
             </button>
-            <button className="border-2 border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-white hover:text-blue-900 transition transform hover:scale-105">
+            <button 
+              onClick={() => scrollToSection('contact')}
+              className="border-2 border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-white hover:text-blue-900 transition transform hover:scale-105"
+            >
               Liên hệ ngay
             </button>
           </div>

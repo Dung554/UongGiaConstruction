@@ -40,7 +40,7 @@ export default function Services() {
   ];
 
   return (
-    <section ref={ref} className="py-16 px-4 bg-white">
+    <section ref={ref} id="services" className="py-16 px-4 bg-white">
       <div className="max-w-7xl mx-auto">
         <h2 className={`text-3xl md:text-4xl font-bold text-blue-900 mb-12 text-center ${isInView ? 'animate-fade-in-down' : 'opacity-0'}`}>
           Dịch vụ của chúng tôi

@@ -27,7 +27,7 @@ export default function Contact() {
   };
 
   return (
-    <section ref={ref} className="py-16 px-4 bg-gray-50">
+    <section ref={ref} id="contact" className="py-16 px-4 bg-gray-50">
       <div className="max-w-7xl mx-auto">
         <h2 className={`text-3xl md:text-4xl font-bold text-blue-900 mb-12 text-center ${isInView ? 'animate-fade-in-down' : 'opacity-0'}`}>
           Liên hệ với chúng tôi
