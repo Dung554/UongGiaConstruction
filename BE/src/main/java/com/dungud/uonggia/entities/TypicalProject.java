@@ -18,12 +18,12 @@ public class TypicalProject {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long typicalProjectId;
+    Long typicalProjectId;
 
-    private String name;
-    private String description;
-    private LocalDate date;
+    String name;
+    String description;
+    LocalDate date;
 
     @OneToMany(mappedBy = "typicalProject", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<PictureURL> pictureURLs;
+    List<PictureURL> pictureURLs;
 }

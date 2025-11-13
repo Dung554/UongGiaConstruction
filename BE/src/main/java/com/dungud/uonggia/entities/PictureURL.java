@@ -15,11 +15,11 @@ public class PictureURL {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long pictureURLId;
+    Long pictureURLId;
 
-    private String URL;
+    String URL;
 
     @ManyToOne
     @JoinColumn(name = "TypicalProjectsId")
-    private TypicalProject typicalProject;
+    TypicalProject typicalProject;
 }
