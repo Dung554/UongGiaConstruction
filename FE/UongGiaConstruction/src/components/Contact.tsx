@@ -1,18 +1,24 @@
 // src/components/Contact.tsx
 import { useState } from 'react';
 import { useInView } from '../hooks/useInView';
+import { userConsultationApi, type UserConsultationRequest } from '../api/api';
 
 export default function Contact() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    phone: '',
-    message: ''
+    phone: ''
   });
+  
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<{
+    type: 'success' | 'error' | null;
+    message: string;
+  }>({ type: null, message: '' });
 
   const { ref, isInView } = useInView({ threshold: 0.2 });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
@@ -20,10 +26,47 @@ export default function Contact() {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
-    setFormData({ name: '', email: '', phone: '', message: '' });
+    setIsSubmitting(true);
+    setSubmitStatus({ type: null, message: '' });
+
+    try {
+      const requestData: UserConsultationRequest = {
+        guestName: formData.name,
+        guestPhoneNumber: formData.phone,
+        email: formData.email,
+      };
+
+      const response = await userConsultationApi.create(requestData);
+      
+      setSubmitStatus({
+        type: 'success',
+        message: response.data.message || 'Gửi thông tin thành công! Chúng tôi sẽ liên hệ với bạn sớm.'
+      });
+      
+      // Reset form
+      setFormData({ name: '', email: '', phone: '' });
+      
+      // Clear success message after 5 seconds
+      setTimeout(() => {
+        setSubmitStatus({ type: null, message: '' });
+      }, 5000);
+      
+    } catch (error: any) {
+      console.error('Error submitting consultation:', error);
+      setSubmitStatus({
+        type: 'error',
+        message: error.response?.data?.message || 'Có lỗi xảy ra. Vui lòng thử lại sau.'
+      });
+      
+      // Clear error message after 5 seconds
+      setTimeout(() => {
+        setSubmitStatus({ type: null, message: '' });
+      }, 5000);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -58,55 +101,74 @@ export default function Contact() {
           </div>
 
           <form onSubmit={handleSubmit} className={`bg-white p-8 rounded-lg shadow-lg ${isInView ? 'animate-fade-in-right' : 'opacity-0'}`}>
+            {/* Status Message */}
+            {submitStatus.type && (
+              <div className={`mb-6 p-4 rounded-lg ${
+                submitStatus.type === 'success' 
+                  ? 'bg-green-100 text-green-800 border border-green-300' 
+                  : 'bg-red-100 text-red-800 border border-red-300'
+              }`}>
+                {submitStatus.message}
+              </div>
+            )}
+
             <div className="mb-6">
+              <label className="block text-gray-700 font-medium mb-2">Họ và tên *</label>
               <input
                 type="text"
                 name="name"
-                placeholder="Họ và tên"
+                placeholder="Nhập họ và tên của bạn"
                 value={formData.name}
                 onChange={handleChange}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 transition"
                 required
+                disabled={isSubmitting}
               />
             </div>
+
             <div className="mb-6">
+              <label className="block text-gray-700 font-medium mb-2">Số điện thoại *</label>
+              <input
+                type="tel"
+                name="phone"
+                placeholder="Nhập số điện thoại"
+                value={formData.phone}
+                onChange={handleChange}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 transition"
+                required
+                disabled={isSubmitting}
+              />
+            </div>
+
+            <div className="mb-6">
+              <label className="block text-gray-700 font-medium mb-2">Email *</label>
               <input
                 type="email"
                 name="email"
-                placeholder="Email"
+                placeholder="Nhập địa chỉ email"
                 value={formData.email}
                 onChange={handleChange}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 transition"
                 required
+                disabled={isSubmitting}
               />
             </div>
-            <div className="mb-6">
-              <input
-                type="tel"
-                name="phone"
-                placeholder="Số điện thoại"
-                value={formData.phone}
-                onChange={handleChange}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 transition"
-              />
-            </div>
-            <div className="mb-6">
-              <textarea
-                name="message"
-                placeholder="Tin nhắn"
-                value={formData.message}
-                onChange={handleChange}
-                rows={4}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 transition"
-                required
-              ></textarea>
-            </div>
+
             <button
               type="submit"
-              className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition transform hover:scale-105"
+              disabled={isSubmitting}
+              className={`w-full py-3 rounded-lg font-semibold transition transform ${
+                isSubmitting 
+                  ? 'bg-gray-400 cursor-not-allowed' 
+                  : 'bg-blue-600 text-white hover:bg-blue-700 hover:scale-105'
+              }`}
             >
-              Gửi tin nhắn
+              {isSubmitting ? 'Đang gửi...' : 'Gửi yêu cầu tư vấn'}
             </button>
+
+            <p className="text-sm text-gray-500 mt-4 text-center">
+              Chúng tôi sẽ liên hệ với bạn trong thời gian sớm nhất
+            </p>
           </form>
         </div>
       </div>
