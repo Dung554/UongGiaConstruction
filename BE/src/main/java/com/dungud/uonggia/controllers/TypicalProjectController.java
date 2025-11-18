@@ -4,6 +4,7 @@ import com.dungud.uonggia.dtos.requests.TypicalProjectRequest;
 import com.dungud.uonggia.dtos.response.ApiResponse;
 import com.dungud.uonggia.dtos.response.TypicalProjectDetailResponse;
 import com.dungud.uonggia.dtos.response.TypicalProjectResponse;
+import com.dungud.uonggia.services.PictureURLService;
 import com.dungud.uonggia.services.TypicalProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +18,8 @@ import java.util.List;
 public class TypicalProjectController {
     @Autowired
     TypicalProjectService typicalProjectService;
+    @Autowired
+    PictureURLService pictureURLService;
 
     @GetMapping("/getAll")
     public ApiResponse<List<TypicalProjectResponse>> getAll() {
@@ -36,8 +39,10 @@ public class TypicalProjectController {
 
     @PostMapping("/create")
     public ApiResponse<Long> create(@ModelAttribute TypicalProjectRequest request,
-                                    @RequestParam("thumbnail") MultipartFile file) throws IOException, InterruptedException {
+                                    @RequestParam("thumbnail") MultipartFile file,
+                                    @RequestParam("pictureURL") List<MultipartFile> files) throws IOException, InterruptedException {
         Long id = typicalProjectService.create(request, file);
+        pictureURLService.UploadMultiplePictures(id, files);
         return ApiResponse.<Long>builder()
                 .message("Tạo dự án tiêu biểu thành công")
                 .data(id)

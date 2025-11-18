@@ -10,6 +10,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class LocalStorageService {
@@ -25,7 +27,6 @@ public class LocalStorageService {
 
         String filename = System.currentTimeMillis() + "_" + file.getOriginalFilename();
 
-        // Photo/TypicalProject/2
         Path projectPath = Paths.get(uploadDir, folder, String.valueOf(id)).normalize();
 
         Files.createDirectories(projectPath);
@@ -49,12 +50,21 @@ public class LocalStorageService {
     }
 
     public void deleteFolder(Long id, String folder) throws IOException {
-        Path folderPath = Paths.get(uploadDir, folder, String.valueOf(id)).normalize();
+        Path folderPath = Paths.get(uploadDir, folder, String.valueOf(id))
+                .toAbsolutePath()
+                .normalize();
 
-        if (Files.exists(folderPath)) {
-            Files.walk(folderPath)
-                    .sorted((a, b) -> b.compareTo(a)) // delete children first
-                    .forEach(path -> path.toFile().delete());
-        }
+        if (!Files.exists(folderPath)) return;
+
+        Files.walk(folderPath)
+                .sorted((a, b) -> b.compareTo(a)) // Xoá file trước thư mục
+                .forEach(path -> {
+                    try {
+                        Files.deleteIfExists(path);
+                    } catch (IOException e) {
+                        throw new RuntimeException("Failed to delete: " + path, e);
+                    }
+                });
     }
+
 }

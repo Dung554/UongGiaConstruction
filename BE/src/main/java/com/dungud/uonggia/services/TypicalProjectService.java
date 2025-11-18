@@ -72,14 +72,19 @@ public class TypicalProjectService {
     }
 
     public void delete(Long id) throws Exception {
-        TypicalProject typicalProject = typicalProjectRepository.findById(id)
+        TypicalProject tp = typicalProjectRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Typical Project not found with id: " + id));
 
-        String filePath = typicalProject.getThumbnailURL();
+        // Xoá tất cả PictureURL record
+        pictureURLRepository.deleteAll(
+                pictureURLRepository.findAllByTypicalProject_TypicalProjectId(id)
+        );
 
-        storage.deleteFileByUrl(filePath);
+        // ❗ Xoá toàn bộ folder ảnh (thumbnail + các ảnh khác)
+        storage.deleteFolder(id, "TypicalProject");
 
-        typicalProjectRepository.delete(typicalProject);
+        // Xoá project
+        typicalProjectRepository.delete(tp);
     }
 
     public List<TypicalProjectResponse> getAll(){
