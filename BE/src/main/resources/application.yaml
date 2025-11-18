@@ -19,6 +19,12 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
     open-in-view: false
 
+  mvc:
+    static-path-pattern: /photos/**
+
+upload:
+  dir: ./photos
+
 jwt:
   valid-duration: 3600
   refreshable-duration: 172800

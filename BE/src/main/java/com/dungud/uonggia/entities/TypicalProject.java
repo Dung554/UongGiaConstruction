@@ -21,7 +21,10 @@ public class TypicalProject {
     Long typicalProjectId;
 
     String name;
+    Long square;
+    String location;
     String description;
+    String thumbnailURL;
     LocalDate date;
 
     @OneToMany(mappedBy = "typicalProject", cascade = CascadeType.ALL, orphanRemoval = true)

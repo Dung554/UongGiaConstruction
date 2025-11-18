@@ -77,7 +77,8 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers("/api/userConsultation/create","api/userConsultation/getAllConsultations").permitAll()  // Hoặc endpoint cụ thể
+                        .requestMatchers("/api/userConsultation/create","api/userConsultation/getAllConsultations",
+                                "api/typicalProject/getAll", "api/typicalProject/getById/**").permitAll()  // Hoặc endpoint cụ thể
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session
