@@ -21,6 +21,21 @@ export interface ApiResponse<T> {
   data?: T;
 }
 
+export interface TypicalProjectResponse {
+  typicalProjectId: number;
+  name: string;
+  description: string;
+  thumbnailURL: string;
+  date: string;
+  square: number;
+  location: string;
+}
+
+export interface TypicalProjectDetailResponse extends TypicalProjectResponse {
+  pictureURLs?: string[];
+  // Add other detail fields if needed
+}
+
 export const userConsultationApi = {
   create: (data: UserConsultationRequest) => 
     apiClient.post<ApiResponse<void>>('/userConsultation/create', data),
@@ -33,6 +48,14 @@ export const userConsultationApi = {
   
   updateStatus: (id: number, status: any) => 
     apiClient.put<ApiResponse<void>>(`/userConsultation/updateStatus/${id}`, status),
+};
+
+export const typicalProjectApi = {
+  getAll: () => 
+    apiClient.get<ApiResponse<TypicalProjectResponse[]>>('/typicalProject/getAll'),
+  
+  getById: (id: number) => 
+    apiClient.get<ApiResponse<TypicalProjectDetailResponse>>(`/typicalProject/getById/${id}`),
 };
 
 export default apiClient;
