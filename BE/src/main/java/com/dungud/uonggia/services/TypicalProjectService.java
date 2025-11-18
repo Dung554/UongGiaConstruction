@@ -75,15 +75,12 @@ public class TypicalProjectService {
         TypicalProject tp = typicalProjectRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Typical Project not found with id: " + id));
 
-        // Xoá tất cả PictureURL record
         pictureURLRepository.deleteAll(
                 pictureURLRepository.findAllByTypicalProject_TypicalProjectId(id)
         );
 
-        // ❗ Xoá toàn bộ folder ảnh (thumbnail + các ảnh khác)
         storage.deleteFolder(id, "TypicalProject");
 
-        // Xoá project
         typicalProjectRepository.delete(tp);
     }
 

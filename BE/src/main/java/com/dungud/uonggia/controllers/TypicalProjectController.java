@@ -52,8 +52,10 @@ public class TypicalProjectController {
     @PutMapping("/update/{id}")
     public ApiResponse<Void> update(@PathVariable long id,
                                     @ModelAttribute TypicalProjectRequest request,
-                                    @RequestParam(value = "thumbnail", required = false) MultipartFile file) throws Exception {
+                                    @RequestParam(value = "thumbnail", required = false) MultipartFile file,
+                                    @RequestParam(value = "pictureURL") List<MultipartFile> files) throws Exception {
         typicalProjectService.update(id, request, file);
+        pictureURLService.updatePictureURL(id, files);
         return ApiResponse.<Void>builder()
                 .message("Cập nhật dự án tiêu biểu thành công")
                 .build();
