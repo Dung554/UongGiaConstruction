@@ -31,9 +31,19 @@ export interface TypicalProjectResponse {
   location: string;
 }
 
-export interface TypicalProjectDetailResponse extends TypicalProjectResponse {
-  pictureURLs?: string[];
-  // Add other detail fields if needed
+export interface ImageResponse {
+  imageId?: number;
+  imageURL: string;
+}
+
+export interface TypicalProjectDetailResponse {
+  name: string;
+  description: string;
+  thumbnailURL: string;
+  date: string;
+  square: number;
+  location: string;
+  imageURLs?: ImageResponse[];
 }
 
 export const userConsultationApi = {

@@ -249,12 +249,12 @@ export default function Projects() {
                   </div>
 
                   {/* Project Images Gallery */}
-                  {selectedProject.pictureURLs && selectedProject.pictureURLs.length > 0 && (
+                  {selectedProject.imageURLs && selectedProject.imageURLs.length > 0 && (
                     <div className="space-y-4">
-                      {selectedProject.pictureURLs.map((url, idx) => (
-                        <div key={idx} className="rounded-lg overflow-hidden shadow-md">
+                      {selectedProject.imageURLs.map((image, idx) => (
+                        <div key={image.imageId || idx} className="rounded-lg overflow-hidden shadow-md">
                           <img 
-                            src={url}
+                            src={image.imageURL}
                             alt={`${selectedProject.name} - Hình ${idx + 1}`}
                             className="w-full h-auto object-cover"
                           />
@@ -264,7 +264,7 @@ export default function Projects() {
                   )}
 
                   {/* Thumbnail if no other images */}
-                  {(!selectedProject.pictureURLs || selectedProject.pictureURLs.length === 0) && selectedProject.thumbnailURL && (
+                  {(!selectedProject.imageURLs || selectedProject.imageURLs.length === 0) && selectedProject.thumbnailURL && (
                     <div className="space-y-4">
                       <div className="rounded-lg overflow-hidden shadow-md">
                         <img 
