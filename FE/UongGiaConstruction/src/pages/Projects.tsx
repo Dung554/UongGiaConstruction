@@ -1,10 +1,11 @@
 // src/pages/Projects.tsx
 import { useState, useEffect } from 'react';
-import { MapPin, Calendar, Maximize2, X, Eye, Loader, Home, Building2, Bed } from 'lucide-react';
+import { MapPin, X, Eye, Loader } from 'lucide-react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { useInView } from '../hooks/useInView';
-import { typicalProjectApi, type TypicalProjectResponse, type TypicalProjectDetailResponse } from '../api/api.ts';
+import { typicalProjectApi, type TypicalProjectResponse, type TypicalProjectDetailResponse } from '../api/api';
+import { environment } from '../config/environment';
 
 interface Project {
   id: number;
@@ -41,7 +42,7 @@ export default function Projects() {
             description: item.description,
             date: item.date,
             square: item.square,
-            thumbnailURL: item.thumbnailURL
+            thumbnailURL: environment.getImageUrl(item.thumbnailURL)
           }));
           setProjects(mappedProjects);
         }
@@ -64,7 +65,23 @@ export default function Projects() {
       const response = await typicalProjectApi.getById(projectId);
       
       if (response.data.data) {
-        setSelectedProject(response.data.data);
+        // Convert local paths to backend URLs using environment config
+        const projectData = response.data.data;
+        
+        // Fix thumbnail URL
+        if (projectData.thumbnailURL) {
+          projectData.thumbnailURL = environment.getImageUrl(projectData.thumbnailURL);
+        }
+        
+        // Fix image URLs
+        if (projectData.imageURLs && projectData.imageURLs.length > 0) {
+          projectData.imageURLs = projectData.imageURLs.map(img => ({
+            ...img,
+            imageURL: environment.getImageUrl(img.imageURL)
+          }));
+        }
+        
+        setSelectedProject(projectData);
       }
     } catch (err: any) {
       console.error('Error fetching project detail:', err);
@@ -182,7 +199,7 @@ export default function Projects() {
       {/* Modal/Popup */}
       {selectedProject && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50 overflow-y-auto">
-          <div className="bg-white rounded-2xl shadow-2xl max-w-3xl w-full my-8 animate-scale-in max-h-[95vh] overflow-y-auto">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-3xl w-full my-8 animate-scale-in max-h-[95vh] overflow-y-auto relative">
             {loadingDetail ? (
               <div className="flex justify-center items-center py-20">
                 <Loader className="animate-spin text-blue-600" size={48} />
@@ -192,15 +209,15 @@ export default function Projects() {
                 {/* Close Button */}
                 <button
                   onClick={() => setSelectedProject(null)}
-                  className="absolute top-4 right-4 bg-white rounded-full p-2 shadow-lg hover:shadow-xl transition z-10"
+                  className="sticky top-4 float-right mr-4 mt-4 bg-white rounded-full p-2 shadow-lg hover:shadow-xl transition z-10"
                 >
                   <X size={24} className="text-gray-700" />
                 </button>
 
                 {/* Modal Content */}
-                <div className="p-6">
+                <div className="p-6 clear-both">
                   {/* Title */}
-                  <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-6 pr-12">
+                  <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-6">
                     {selectedProject.name}
                   </h2>
 
@@ -257,6 +274,10 @@ export default function Projects() {
                             src={image.imageURL}
                             alt={`${selectedProject.name} - Hình ${idx + 1}`}
                             className="w-full h-auto object-cover"
+                            onError={(e) => {
+                              console.error('Image failed to load:', image.imageURL);
+                              e.currentTarget.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="400" height="300"%3E%3Crect fill="%23ddd" width="400" height="300"/%3E%3Ctext x="50%25" y="50%25" text-anchor="middle" fill="%23999"%3EKhông tải được ảnh%3C/text%3E%3C/svg%3E';
+                            }}
                           />
                         </div>
                       ))}
