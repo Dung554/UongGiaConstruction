@@ -12,18 +12,32 @@ import { useEffect } from 'react';
 export default function Home() {
   useEffect(() => {
     // Smooth scroll behavior
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
-          target.scrollIntoView({
+    const handleClick = (e: Event) => {
+      e.preventDefault();
+      const target = e.currentTarget as HTMLAnchorElement;
+      const href = target.getAttribute('href');
+      if (href) {
+        const element = document.querySelector(href);
+        if (element) {
+          element.scrollIntoView({
             behavior: 'smooth',
             block: 'start'
           });
         }
-      });
+      }
+    };
+
+    const anchors = document.querySelectorAll('a[href^="#"]');
+    anchors.forEach(anchor => {
+      anchor.addEventListener('click', handleClick);
     });
+
+    // Cleanup
+    return () => {
+      anchors.forEach(anchor => {
+        anchor.removeEventListener('click', handleClick);
+      });
+    };
   }, []);
 
   return (
@@ -33,8 +47,8 @@ export default function Home() {
         <Hero />
       </div>
       <div id="overview">
-  <Overview />
-</div>
+        <Overview />
+      </div>
       <div id="projects">
         <Projects />
       </div>
@@ -48,7 +62,7 @@ export default function Home() {
 
      {/* Zalo Button - Fixed */}
      <a
-        href="https://zalo.me/0383673904"
+        href="https://zalo.me/0987778548"
         target="_blank"
         rel="noopener noreferrer"
         className="fixed bottom-6 right-6 z-40 bg-blue-500 hover:bg-blue-600 text-white rounded-full shadow-lg hover:shadow-xl transition transform hover:scale-110 w-14 h-14 flex items-center justify-center"
