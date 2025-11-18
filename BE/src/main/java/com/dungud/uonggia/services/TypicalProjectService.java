@@ -55,18 +55,19 @@ public class TypicalProjectService {
         typicalProject.setSquare(request.getSquare());
         typicalProject.setLocation(request.getLocation());
 
-        String filePath = typicalProject.getThumbnailURL();
+        if(typicalProject.getThumbnailURL()!=null && !typicalProject.getThumbnailURL().isEmpty()) {
+            String filePath = typicalProject.getThumbnailURL();
 
-        storage.deleteFileByUrl(filePath);
+            storage.deleteFileByUrl(filePath);
 
-        String imageUrl = storage.saveFile(
-                typicalProject.getTypicalProjectId(),
-                file,
-                "TypicalProject"
-        );
+            String imageUrl = storage.saveFile(
+                    typicalProject.getTypicalProjectId(),
+                    file,
+                    "TypicalProject"
+            );
 
-        typicalProject.setThumbnailURL(imageUrl);
-
+            typicalProject.setThumbnailURL(imageUrl);
+        }
         typicalProjectRepository.save(typicalProject);
     }
 
