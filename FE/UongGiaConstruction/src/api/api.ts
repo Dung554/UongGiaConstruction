@@ -31,8 +31,7 @@ export interface TypicalProjectResponse {
 }
 
 export interface ImageResponse {
-  imageId?: number;
-  imageURL: string;
+  url: string;  // ← Từ "imageURL" → "url"
 }
 
 export interface TypicalProjectDetailResponse {
