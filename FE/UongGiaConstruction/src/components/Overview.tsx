@@ -21,13 +21,10 @@ export default function Overview() {
               <p className="text-gray-600">Năm kinh nghiệm</p>
             </div>
             <div className={`bg-blue-50 p-6 rounded-lg transform transition hover:scale-105 ${isInView ? 'animate-bounce-in delay-100' : 'opacity-0'}`}>
-              <div className="text-4xl font-bold text-blue-900 mb-2">80+</div>
+              <div className="text-4xl font-bold text-blue-900 mb-2">50+</div>
               <p className="text-gray-600">Dự án hoàn thành</p>
             </div>
-            <div className={`bg-blue-50 p-6 rounded-lg transform transition hover:scale-105 ${isInView ? 'animate-bounce-in delay-200' : 'opacity-0'}`}>
-              <div className="text-4xl font-bold text-blue-900 mb-2">30+</div>
-              <p className="text-gray-600">Chuyên gia</p>
-            </div>
+
           </div>
         </div>
       </div>
