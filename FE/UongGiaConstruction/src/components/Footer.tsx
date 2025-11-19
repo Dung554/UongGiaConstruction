@@ -6,10 +6,7 @@ export default function Footer() {
     <footer className="bg-blue-900 text-white py-12 px-4">
       <div className="max-w-7xl mx-auto">
         <div className="grid md:grid-cols-4 gap-8 mb-8">
-          <div>
-            <h3 className="text-xl font-bold mb-4">Về chúng tôi</h3>
-            <p className="text-blue-200 text-sm">Công ty hàng đầu trong lĩnh vực xây dựng và phát triển bất động sản tại Việt Nam.</p>
-          </div>
+
           <div>
             <h3 className="text-xl font-bold mb-4">Dịch vụ</h3>
             <ul className="text-blue-200 text-sm space-y-2">
@@ -21,9 +18,9 @@ export default function Footer() {
           <div>
             <h3 className="text-xl font-bold mb-4">Liên hệ</h3>
             <ul className="text-blue-200 text-sm space-y-2">
-              <li>TP.HCM: +84 28 3823 1234</li>
-              <li>Hà Nội: +84 24 3823 5678</li>
-              <li>Email: info@construction.vn</li>
+              <li>Điện thoại: +84 987 778 548</li>
+              <li>Zalo: +84 987 778 548</li>
+              <li>Email: haodtc@gmail.com</li>
             </ul>
           </div>
           <div>
@@ -38,7 +35,7 @@ export default function Footer() {
         </div>
 
         <div className="border-t border-blue-800 pt-8 text-center text-blue-200 text-sm">
-          <p>&copy; 2024 Công ty Kiến tạo Công trình. Tất cả quyền được bảo lưu.</p>
+          <p>&copy; 2025 Công ty TNHH Tư vấn thiết kế xây dựng Uông Gia. Tất cả quyền được bảo lưu.</p>
         </div>
       </div>
     </footer>
