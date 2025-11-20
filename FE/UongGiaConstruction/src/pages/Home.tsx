@@ -8,10 +8,32 @@ import Contact from '../components/Contact';
 import Footer from '../components/Footer';
 import { MessageCircle } from 'lucide-react';
 import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 
 export default function Home() {
+  const location = useLocation();
+
   useEffect(() => {
-    // Smooth scroll behavior
+    // Handle hash navigation when coming from other pages
+    if (location.hash) {
+      // Remove the # from hash
+      const sectionId = location.hash.substring(1);
+      
+      // Wait for page to render then scroll
+      setTimeout(() => {
+        const element = document.getElementById(sectionId);
+        if (element) {
+          element.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      }, 100);
+    }
+  }, [location]);
+
+  useEffect(() => {
+    // Smooth scroll behavior for anchor links
     const handleClick = (e: Event) => {
       e.preventDefault();
       const target = e.currentTarget as HTMLAnchorElement;
