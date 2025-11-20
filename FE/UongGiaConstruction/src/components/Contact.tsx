@@ -82,15 +82,15 @@ export default function Contact() {
             <div className="space-y-6">
               <div>
                 <p className="font-semibold text-blue-900 mb-2">Địa chỉ</p>
-                <p className="text-gray-600">123 Đường Nguyễn Huệ, Quận 1, TP.HCM</p>
+                <p className="text-gray-600">81/9 Dương Bạch Mai, P.Tam Hiệp, TP.Biên Hoà, Đồng Nai</p>
               </div>
               <div>
                 <p className="font-semibold text-blue-900 mb-2">Điện thoại</p>
-                <p className="text-gray-600">+84 28 3823 1234</p>
+                <p className="text-gray-600">+84 987 778 548</p>
               </div>
               <div>
                 <p className="font-semibold text-blue-900 mb-2">Email</p>
-                <p className="text-gray-600">info@construction.vn</p>
+                <p className="text-gray-600">haodtc@gmail.com</p>
               </div>
               <div>
                 <p className="font-semibold text-blue-900 mb-2">Giờ làm việc</p>
