@@ -136,7 +136,6 @@ export default function Projects() {
                       <MapPin size={18} className="flex-shrink-0" />
                       <p className="text-sm line-clamp-1">{project.location}</p>
                     </div>
-                    <p className="text-gray-600 text-sm mb-4 line-clamp-2">{project.description}</p>
                     
                     <div className="grid grid-cols-2 gap-3 pt-4 border-t border-gray-200">
                       <div>
