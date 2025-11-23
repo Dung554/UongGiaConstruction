@@ -54,6 +54,7 @@ public class TypicalProjectService {
         typicalProject.setDescription(request.getDescription());
         typicalProject.setSquare(request.getSquare());
         typicalProject.setLocation(request.getLocation());
+        typicalProject.setDate(request.getDate());
 
         if(typicalProject.getThumbnailURL()!=null && !typicalProject.getThumbnailURL().isEmpty()) {
             String filePath = typicalProject.getThumbnailURL();
