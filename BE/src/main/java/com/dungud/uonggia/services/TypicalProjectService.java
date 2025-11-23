@@ -28,7 +28,7 @@ public class TypicalProjectService {
     public Long create(TypicalProjectRequest request, MultipartFile file) throws IOException, InterruptedException {
 
         TypicalProject typicalProject = TypicalProject.builder()
-                .date(LocalDate.now())
+                .date(request.getDate())
                 .name(request.getName())
                 .description(request.getDescription())
                 .square(request.getSquare())

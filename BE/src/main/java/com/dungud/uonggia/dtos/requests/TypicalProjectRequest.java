@@ -17,4 +17,5 @@ public class TypicalProjectRequest {
     String thumbnailURL;
     Long square;
     String location;
+    LocalDate date;
 }
