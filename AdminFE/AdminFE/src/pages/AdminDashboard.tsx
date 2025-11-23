@@ -1,25 +1,17 @@
 import React, { useState, useEffect } from 'react'
 import AdminHeader from '../components/AdminHeader'
-import { users, projects, supports } from '../api/api'
+import { typicalProject, userConsultation } from '../api/api'
 
 const DashboardTab: React.FC = () => <div>Welcome to Admin Dashboard</div>
 
 const UsersTab: React.FC = () => {
-  const [list, setList] = useState<any[]>([])
-  useEffect(() => {
-    users
-      .list()
-      .then((r) => setList(r.data?.data || r.data))
-      .catch(() => setList([]))
-  }, [])
+  // Backend currently does not expose a dedicated users management controller.
+  // Show placeholder and instructions to add endpoints if admin wants full user CRUD.
   return (
     <div>
-      <h3>Users</h3>
-      <ul>
-        {list.map((u: any) => (
-          <li key={u.id || u.username}>{u.username || u.name || JSON.stringify(u)}</li>
-        ))}
-      </ul>
+      <h3>Quản lý người dùng</h3>
+      <p>Hiện tại backend không có API công khai để quản lý người dùng (no `/api/users` controller).</p>
+      <p>Nếu bạn muốn, tôi có thể thêm UI để gọi các endpoint quản lý người dùng khi backend hỗ trợ (list/create/update/delete).</p>
     </div>
   )
 }
@@ -27,17 +19,17 @@ const UsersTab: React.FC = () => {
 const ProjectsTab: React.FC = () => {
   const [list, setList] = useState<any[]>([])
   useEffect(() => {
-    projects
-      .list()
+    typicalProject
+      .getAll()
       .then((r) => setList(r.data?.data || r.data))
       .catch(() => setList([]))
   }, [])
   return (
     <div>
-      <h3>Projects</h3>
+      <h3>Dự án tiêu biểu</h3>
       <ul>
         {list.map((p: any) => (
-          <li key={p.id || p.title}>{p.title || JSON.stringify(p)}</li>
+          <li key={p.id || p.title}>{p.title || p.name || JSON.stringify(p)}</li>
         ))}
       </ul>
     </div>
@@ -47,17 +39,17 @@ const ProjectsTab: React.FC = () => {
 const SupportTab: React.FC = () => {
   const [list, setList] = useState<any[]>([])
   useEffect(() => {
-    supports
-      .list()
+    userConsultation
+      .getAllConsultations()
       .then((r) => setList(r.data?.data || r.data))
       .catch(() => setList([]))
   }, [])
   return (
     <div>
-      <h3>Customer Support</h3>
+      <h3>Hỗ trợ khách hàng</h3>
       <ul>
         {list.map((s: any) => (
-          <li key={s.id || s.subject}>{s.subject || JSON.stringify(s)}</li>
+          <li key={s.id || s.email}>{s.name || s.email || JSON.stringify(s)}</li>
         ))}
       </ul>
     </div>
