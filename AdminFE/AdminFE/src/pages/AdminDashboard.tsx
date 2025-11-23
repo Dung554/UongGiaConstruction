@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import AdminHeader from '../components/AdminHeader'
 import { typicalProject, userConsultation } from '../api/api'
 import { useNavigate } from 'react-router-dom'
@@ -96,16 +96,24 @@ const ProjectForm: React.FC<{ initial?: any; onClose: () => void; onSaved: () =>
   const [location, setLocation] = useState(initial?.location || '')
   const [square, setSquare] = useState(initial?.square || '')
   const [thumbnail, setThumbnail] = useState<File | null>(null)
+  const [thumbnailPreview, setThumbnailPreview] = useState<string | null>(null)
   const [pictures, setPictures] = useState<File[]>([])
+  const [picturesPreview, setPicturesPreview] = useState<string[]>([])
+  const thumbnailRef = useRef<HTMLInputElement | null>(null)
+  const picturesRef = useRef<HTMLInputElement | null>(null)
   const [saving, setSaving] = useState(false)
 
   const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return
-    setThumbnail(e.target.files[0])
+    const f = e.target.files[0]
+    setThumbnail(f)
+    setThumbnailPreview(URL.createObjectURL(f))
   }
   const handlePictures = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return
-    setPictures(Array.from(e.target.files))
+    const arr = Array.from(e.target.files)
+    setPictures(arr)
+    setPicturesPreview(arr.map((f) => URL.createObjectURL(f)))
   }
 
   const submit = async (e: React.FormEvent) => {
@@ -158,11 +166,28 @@ const ProjectForm: React.FC<{ initial?: any; onClose: () => void; onSaved: () =>
         </div>
         <div className="mt-4">
           <label className="block text-sm font-medium text-gray-700">Thumbnail</label>
-          <input type="file" accept="image/*" onChange={handleFile} className="mt-1" />
+          <div className="mt-2 flex items-center gap-3">
+            <button type="button" onClick={()=>thumbnailRef.current?.click()} className="px-3 py-2 bg-white border rounded">Chọn ảnh</button>
+            {thumbnail && <div className="text-sm text-gray-600">{thumbnail.name}</div>}
+            {thumbnailPreview && <img src={thumbnailPreview} alt="thumb" className="w-20 h-12 object-cover rounded" />}
+          </div>
+          <input ref={thumbnailRef} type="file" accept="image/*" onChange={handleFile} className="hidden" />
         </div>
+
         <div className="mt-4">
           <label className="block text-sm font-medium text-gray-700">Hình khác (có thể chọn nhiều)</label>
-          <input type="file" accept="image/*" multiple onChange={handlePictures} className="mt-1" />
+          <div className="mt-2 flex items-center gap-3">
+            <button type="button" onClick={()=>picturesRef.current?.click()} className="px-3 py-2 bg-white border rounded">Chọn nhiều ảnh</button>
+            {pictures.length > 0 && <div className="text-sm text-gray-600">{pictures.length} ảnh đã chọn</div>}
+          </div>
+          <input ref={picturesRef} type="file" accept="image/*" multiple onChange={handlePictures} className="hidden" />
+          {picturesPreview.length > 0 && (
+            <div className="mt-3 grid grid-cols-3 gap-2">
+              {picturesPreview.map((src, idx) => (
+                <img key={idx} src={src} className="w-full h-20 object-cover rounded" alt={`preview-${idx}`} />
+              ))}
+            </div>
+          )}
         </div>
 
         <div className="mt-6 flex gap-3">
