@@ -3,7 +3,88 @@ import AdminHeader from '../components/AdminHeader'
 import { typicalProject, userConsultation } from '../api/api'
 import { useNavigate } from 'react-router-dom'
 
-const DashboardTab: React.FC = () => <div>Welcome to Admin Dashboard</div>
+const DashboardTab: React.FC = () => {
+  return (
+    <div className="bg-gradient-to-br from-blue-50 via-white to-purple-50 p-8 rounded-lg">
+      <div className="max-w-4xl mx-auto">
+        <div className="text-center mb-8">
+          <h1 className="text-4xl font-bold text-gray-900 mb-3">
+            Chào mừng đến với Hệ thống Quản lý
+          </h1>
+          <h2 className="text-3xl font-semibold text-blue-600 mb-4">
+            Gói Thầu Xây Dựng
+          </h2>
+          <p className="text-lg text-gray-600">
+            Quản lý dự án và yêu cầu khách hàng một cách hiệu quả
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-10">
+          <div className="bg-white rounded-lg shadow-md p-6 border-2 border-blue-100 hover:border-blue-300 transition-all hover:shadow-lg">
+            <div className="flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-4 mx-auto">
+              <svg className="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+              </svg>
+            </div>
+            <h3 className="text-xl font-semibold text-gray-900 text-center mb-2">
+              Quản lý Dự án
+            </h3>
+            <p className="text-gray-600 text-center mb-4">
+              Tạo, chỉnh sửa và quản lý các dự án tiêu biểu của công ty
+            </p>
+            <div className="text-center">
+              <span className="inline-block px-4 py-2 bg-blue-50 text-blue-700 rounded-full text-sm font-medium">
+                Nhấn tab "Quản lý dự án" để bắt đầu
+              </span>
+            </div>
+          </div>
+
+          <div className="bg-white rounded-lg shadow-md p-6 border-2 border-purple-100 hover:border-purple-300 transition-all hover:shadow-lg">
+            <div className="flex items-center justify-center w-16 h-16 bg-purple-100 rounded-full mb-4 mx-auto">
+              <svg className="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
+              </svg>
+            </div>
+            <h3 className="text-xl font-semibold text-gray-900 text-center mb-2">
+              Quản lý Yêu cầu
+            </h3>
+            <p className="text-gray-600 text-center mb-4">
+              Xem và cập nhật trạng thái các yêu cầu từ khách hàng
+            </p>
+            <div className="text-center">
+              <span className="inline-block px-4 py-2 bg-purple-50 text-purple-700 rounded-full text-sm font-medium">
+                Nhấn tab "Quản lý yêu cầu" để xem
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-10 bg-white rounded-lg shadow-sm p-6 border border-gray-200">
+          <h4 className="text-lg font-semibold text-gray-900 mb-3 flex items-center">
+            <svg className="w-5 h-5 text-yellow-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+            </svg>
+            Tính năng chính
+          </h4>
+          <ul className="space-y-2 text-gray-600">
+            <li className="flex items-start">
+              <span className="text-green-500 mr-2">✓</span>
+              <span>Quản lý danh sách dự án tiêu biểu với đầy đủ thông tin và hình ảnh</span>
+            </li>
+            <li className="flex items-start">
+              <span className="text-green-500 mr-2">✓</span>
+              <span>Theo dõi và cập nhật trạng thái yêu cầu tư vấn từ khách hàng</span>
+            </li>
+            <li className="flex items-start">
+              <span className="text-green-500 mr-2">✓</span>
+              <span>Giao diện thân thiện, dễ sử dụng và tối ưu cho mọi thiết bị</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  )
+}
 
 /* Projects admin: list + create/update/delete using typicalProject endpoints */
 const ProjectsTab: React.FC = () => {
@@ -229,10 +310,16 @@ const SupportTab: React.FC = () => {
     }
   }
 
+  const formatDate = (dateStr: string) => {
+    if (!dateStr) return ''
+    const date = new Date(dateStr)
+    return date.toLocaleDateString('vi-VN')
+  }
+
   return (
     <div className="bg-gray-50 p-4 rounded">
       <div className="flex items-center justify-between">
-        <h3 className="text-xl font-semibold text-gray-800">Quản lý hỗ trợ khách hàng</h3>
+        <h3 className="text-xl font-semibold text-gray-800">Quản lý yêu cầu khách hàng</h3>
         <button onClick={fetch} className="px-3 py-1 bg-white border rounded hover:bg-gray-50">Làm mới</button>
       </div>
 
@@ -243,19 +330,52 @@ const SupportTab: React.FC = () => {
       {!loading && list.length > 0 && (
         <div className="grid gap-4 mt-4">
           {list.map((item: any) => (
-            <div key={item.id} className="bg-white border border-gray-200 p-4 rounded-lg">
-              <div className="flex items-start justify-between gap-4">
-                <div>
-                  <div className="font-medium text-gray-900">{item.name || item.email}</div>
-                  <div className="text-sm text-gray-600">{item.phone}</div>
-                  <div className="mt-2 text-gray-700">{item.message || item.content || ''}</div>
+            <div key={item.userConsultationId} className="bg-white border border-gray-200 p-4 rounded-lg shadow-sm">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="md:col-span-2">
+                  <div className="flex items-start gap-3">
+                    <div className="flex-1">
+                      <div className="font-semibold text-gray-900 text-lg">{item.guestName}</div>
+                      <div className="mt-1 space-y-1">
+                        <div className="text-sm text-gray-600">
+                          <span className="font-medium">SĐT:</span> {item.guestPhoneNumber}
+                        </div>
+                        <div className="text-sm text-gray-600">
+                          <span className="font-medium">Email:</span> {item.email}
+                        </div>
+                        <div className="text-sm text-gray-600">
+                          <span className="font-medium">Ngày tạo:</span> {formatDate(item.createDate)}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <div className="min-w-[200px]">
-                  <label className="block text-sm text-gray-600 mb-1">Trạng thái</label>
-                  <select value={item.status || ''} onChange={(e)=>changeStatus(item.id, e.target.value)} className="w-full border border-gray-200 rounded p-2">
-                    <option value="">-- Chọn --</option>
-                    {statuses.map((s:any)=> <option key={s.key} value={s.key}>{s.value || s.name || s.key}</option>)}
-                  </select>
+                <div className="flex flex-col gap-2">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Trạng thái hiện tại</label>
+                    <div className={`inline-block px-3 py-1 rounded text-sm font-medium ${
+                      item.status === 'NEW' ? 'bg-blue-100 text-blue-800' : 
+                      item.status === 'CONTACTED' ? 'bg-green-100 text-green-800' : 
+                      'bg-gray-100 text-gray-800'
+                    }`}>
+                      {item.status}
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Cập nhật trạng thái</label>
+                    <select 
+                      value={item.status || ''} 
+                      onChange={(e) => changeStatus(item.userConsultationId, e.target.value)} 
+                      className="w-full border border-gray-300 rounded p-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    >
+                      <option value="">-- Chọn trạng thái --</option>
+                      {statuses.map((s: any) => (
+                        <option key={s.status} value={s.status}>
+                          {s.status}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
                 </div>
               </div>
             </div>
@@ -268,9 +388,9 @@ const SupportTab: React.FC = () => {
 
 const AdminDashboard: React.FC = () => {
   const tabs = [
-    { id: 'dashboard', label: 'Dashboard' },
+    { id: 'dashboard', label: 'Trang chủ' },
     { id: 'projects', label: 'Quản lý dự án' },
-    { id: 'support', label: 'Quản lý hỗ trợ' },
+    { id: 'support', label: 'Quản lý yêu cầu' },
   ]
   const [active, setActive] = useState('dashboard')
 
