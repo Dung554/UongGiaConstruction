@@ -9,11 +9,13 @@ const AdminHeader: React.FC = () => {
   }
 
   return (
-    <header style={{ display: 'flex', justifyContent: 'space-between', padding: 12, borderBottom: '1px solid #ddd' }}>
-      <div style={{ fontWeight: 700 }}>Admin Dashboard</div>
-      <div>
-        <button onClick={() => navigate('/admin')} style={{ marginRight: 8 }}>Home</button>
-        <button onClick={logout}>Logout</button>
+    <header className="bg-white border-b">
+      <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+        <div className="text-lg font-semibold text-gray-800">Admin Dashboard</div>
+        <div className="flex items-center gap-2">
+          <button onClick={() => navigate('/admin')} className="px-3 py-1 rounded bg-gray-100 hover:bg-gray-200">Home</button>
+          <button onClick={logout} className="px-3 py-1 rounded bg-red-50 text-red-700 hover:bg-red-100">Logout</button>
+        </div>
       </div>
     </header>
   )
