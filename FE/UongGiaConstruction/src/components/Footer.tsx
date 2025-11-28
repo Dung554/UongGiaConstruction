@@ -18,7 +18,6 @@ export default function Footer() {
           <div>
             <h3 className="text-xl font-bold mb-4">Liên hệ</h3>
             <ul className="text-blue-200 text-sm space-y-2">
-              <li>Điện thoại: +84 987 778 548</li>
               <li>Zalo: +84 987 778 548</li>
               <li>Email: haodtc@gmail.com</li>
             </ul>
