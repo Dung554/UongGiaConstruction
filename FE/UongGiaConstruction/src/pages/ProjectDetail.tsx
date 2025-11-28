@@ -105,10 +105,6 @@ export default function ProjectDetail() {
           <div className="bg-blue-50 rounded-xl p-6 mb-8">
             <div className="space-y-4">
               {/* Owner */}
-              <div>
-                <span className="font-semibold text-gray-900">Chủ đầu tư: </span>
-                <span className="text-gray-700">{project.name}</span>
-              </div>
 
               {/* Location */}
               <div>

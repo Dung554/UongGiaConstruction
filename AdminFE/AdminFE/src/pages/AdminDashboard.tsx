@@ -1,0 +1,356 @@
+import React, { useState, useEffect, useRef } from 'react'
+import AdminHeader from '../components/AdminHeader'
+import { typicalProject, userConsultation } from '../api/api'
+import { useNavigate } from 'react-router-dom'
+
+/* Projects admin: list + create/update/delete using typicalProject endpoints */
+const ProjectsTab: React.FC = () => {
+  const [list, setList] = useState<any[]>([])
+  const [loading, setLoading] = useState(false)
+  const [editing, setEditing] = useState<any | null>(null)
+  const [showForm, setShowForm] = useState(false)
+
+  const fetch = async () => {
+    setLoading(true)
+    try {
+      const r = await typicalProject.getAll()
+      setList(r.data?.data || r.data || [])
+    } catch (e) {
+      setList([])
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => { fetch() }, [])
+
+  const openCreate = () => { setEditing(null); setShowForm(true) }
+  const openEdit = (item: any) => { setEditing(item); setShowForm(true) }
+
+  const onDelete = async (id: number) => {
+    if (!confirm('Bạn có chắc muốn xóa dự án này?')) return
+    try {
+      await typicalProject.delete(id)
+      await fetch()
+      alert('Xóa thành công')
+    } catch (e: any) {
+      alert('Xóa thất bại: ' + (e?.response?.data?.message || e.message))
+    }
+  }
+
+  return (
+    <div className="bg-gray-50 p-4 rounded">
+      <div className="flex items-center justify-between">
+        <h3 className="text-xl font-semibold text-gray-800">Dự án tiêu biểu</h3>
+        <div className="flex items-center gap-2">
+          <button onClick={openCreate} className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700">Tạo dự án mới</button>
+          <button onClick={fetch} className="px-3 py-1 bg-white border rounded hover:bg-gray-50">Làm mới</button>
+        </div>
+      </div>
+
+      {loading && <div className="text-gray-600 mt-4">Đang tải...</div>}
+
+      {!loading && list.length === 0 && <div className="text-gray-600 mt-4">Không có dự án</div>}
+
+      {!loading && list.length > 0 && (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+          {list.map((p: any) => (
+            <ProjectCard key={p.typicalProjectId || p.id} p={p} onEdit={openEdit} onDelete={onDelete} />
+          ))}
+        </div>
+      )}
+
+      {showForm && (
+        <ProjectForm
+          initial={editing}
+          onClose={() => { setShowForm(false); setEditing(null) }}
+          onSaved={() => { setShowForm(false); fetch(); }}
+        />
+      )}
+    </div>
+  )
+}
+
+const ProjectCard: React.FC<{ p: any; onEdit: (p:any)=>void; onDelete:(id:number)=>void }> = ({ p, onEdit, onDelete }) => {
+  const navigate = useNavigate()
+  const id = p.typicalProjectId || p.id
+  const view = () => navigate(`/admin/project/${id}`)
+  
+  const formatDate = (dateStr: string) => {
+    if (!dateStr) return ''
+    const date = new Date(dateStr)
+    return date.toLocaleDateString('vi-VN')
+  }
+  
+  return (
+    <div className="bg-white border border-gray-200 p-4 rounded-lg shadow-sm">
+      <h4 className="text-lg font-medium text-gray-900">{p.name || p.title}</h4>
+      <p className="text-sm text-gray-600 my-1">{p.location}</p>
+      {p.date && (
+        <p className="text-sm text-gray-500">
+          <span className="font-medium">Hoàn thành:</span> {formatDate(p.date)}
+        </p>
+      )}
+      <div className="flex items-center gap-2 mt-3">
+        <button onClick={() => onEdit(p)} className="px-2 py-1 text-sm bg-yellow-50 text-yellow-800 rounded hover:bg-yellow-100">Sửa</button>
+        <button onClick={() => onDelete(id)} className="px-2 py-1 text-sm bg-red-50 text-red-700 rounded hover:bg-red-100">Xóa</button>
+        <button onClick={view} className="px-2 py-1 text-sm bg-blue-50 text-blue-700 rounded hover:bg-blue-100">Xem chi tiết</button>
+      </div>
+    </div>
+  )
+}
+
+const ProjectForm: React.FC<{ initial?: any; onClose: () => void; onSaved: () => void }> = ({ initial, onClose, onSaved }) => {
+  const [name, setName] = useState(initial?.name || '')
+  const [description, setDescription] = useState(initial?.description || '')
+  const [location, setLocation] = useState(initial?.location || '')
+  const [square, setSquare] = useState(initial?.square || '')
+  const [date, setDate] = useState(initial?.date || '')
+  const [thumbnail, setThumbnail] = useState<File | null>(null)
+  const [thumbnailPreview, setThumbnailPreview] = useState<string | null>(null)
+  const [pictures, setPictures] = useState<File[]>([])
+  const [picturesPreview, setPicturesPreview] = useState<string[]>([])
+  const thumbnailRef = useRef<HTMLInputElement | null>(null)
+  const picturesRef = useRef<HTMLInputElement | null>(null)
+  const [saving, setSaving] = useState(false)
+
+  const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files) return
+    const f = e.target.files[0]
+    setThumbnail(f)
+    setThumbnailPreview(URL.createObjectURL(f))
+  }
+  const handlePictures = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files) return
+    const arr = Array.from(e.target.files)
+    setPictures(arr)
+    setPicturesPreview(arr.map((f) => URL.createObjectURL(f)))
+  }
+
+  const submit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setSaving(true)
+    try {
+      const form = new FormData()
+      form.append('name', name)
+      form.append('description', description)
+      form.append('location', location)
+      form.append('square', String(square))
+      if (date) form.append('date', date)
+      if (thumbnail) form.append('thumbnail', thumbnail)
+      pictures.forEach((f) => form.append('pictureURL', f))
+
+      if (initial && (initial.typicalProjectId || initial.id)) {
+        const id = initial.typicalProjectId || initial.id
+        await typicalProject.update(id, form)
+        alert('Cập nhật thành công')
+      } else {
+        await typicalProject.create(form)
+        alert('Tạo dự án thành công')
+      }
+      onSaved()
+    } catch (e: any) {
+      alert('Lỗi khi lưu: ' + (e?.response?.data?.message || e.message))
+    } finally { setSaving(false) }
+  }
+
+  return (
+    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+      <form onSubmit={submit} className="bg-white p-6 rounded-lg w-full max-w-2xl max-h-[80vh] overflow-auto">
+        <h3 className="text-lg font-semibold">{initial ? 'Chỉnh sửa dự án' : 'Tạo dự án mới'}</h3>
+        <div className="mt-4">
+          <label className="block text-sm font-medium text-gray-700">Tên dự án</label>
+          <input value={name} onChange={(e)=>setName(e.target.value)} className="mt-1 block w-full border border-gray-200 rounded p-2" required />
+        </div>
+        <div className="mt-4">
+          <label className="block text-sm font-medium text-gray-700">Mô tả</label>
+          <textarea value={description} onChange={(e)=>setDescription(e.target.value)} className="mt-1 block w-full border border-gray-200 rounded p-2 min-h-[100px]" />
+        </div>
+        <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700">Địa điểm</label>
+            <input value={location} onChange={(e)=>setLocation(e.target.value)} className="mt-1 block w-full border border-gray-200 rounded p-2" />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">Diện tích (m²)</label>
+            <input type="number" value={square} onChange={(e)=>setSquare(e.target.value)} className="mt-1 block w-full border border-gray-200 rounded p-2" />
+          </div>
+        </div>
+        <div className="mt-4">
+          <label className="block text-sm font-medium text-gray-700">Ngày hoàn thành</label>
+          <input type="date" value={date} onChange={(e)=>setDate(e.target.value)} className="mt-1 block w-full border border-gray-200 rounded p-2" />
+        </div>
+        <div className="mt-4">
+          <label className="block text-sm font-medium text-gray-700">Thumbnail</label>
+          <div className="mt-2 flex items-center gap-3">
+            <button type="button" onClick={()=>thumbnailRef.current?.click()} className="px-3 py-2 bg-white border rounded">Chọn ảnh</button>
+            {thumbnail && <div className="text-sm text-gray-600">{thumbnail.name}</div>}
+            {thumbnailPreview && <img src={thumbnailPreview} alt="thumb" className="w-20 h-12 object-cover rounded" />}
+          </div>
+          <input ref={thumbnailRef} type="file" accept="image/*" onChange={handleFile} className="hidden" />
+        </div>
+
+        <div className="mt-4">
+          <label className="block text-sm font-medium text-gray-700">Hình khác (có thể chọn nhiều)</label>
+          <div className="mt-2 flex items-center gap-3">
+            <button type="button" onClick={()=>picturesRef.current?.click()} className="px-3 py-2 bg-white border rounded">Chọn nhiều ảnh</button>
+            {pictures.length > 0 && <div className="text-sm text-gray-600">{pictures.length} ảnh đã chọn</div>}
+          </div>
+          <input ref={picturesRef} type="file" accept="image/*" multiple onChange={handlePictures} className="hidden" />
+          {picturesPreview.length > 0 && (
+            <div className="mt-3 grid grid-cols-3 gap-2">
+              {picturesPreview.map((src, idx) => (
+                <img key={idx} src={src} className="w-full h-20 object-cover rounded" alt={`preview-${idx}`} />
+              ))}
+            </div>
+          )}
+        </div>
+
+        <div className="mt-6 flex gap-3">
+          <button type="submit" disabled={saving} className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50">{saving ? 'Đang lưu...' : 'Lưu'}</button>
+          <button type="button" onClick={onClose} className="px-4 py-2 bg-gray-100 rounded hover:bg-gray-200">Hủy</button>
+        </div>
+      </form>
+    </div>
+  )
+}
+
+/* Support management: show consultations and allow updating status */
+const SupportTab: React.FC = () => {
+  const [list, setList] = useState<any[]>([])
+  const [statuses, setStatuses] = useState<any[]>([])
+  const [loading, setLoading] = useState(false)
+
+  const fetch = async () => {
+    setLoading(true)
+    try {
+      const [r1, r2] = await Promise.all([userConsultation.getAllConsultations(), userConsultation.getAllStatus()])
+      setList(r1.data?.data || r1.data || [])
+      setStatuses(r2.data?.data || r2.data || [])
+    } catch (e) {
+      setList([])
+      setStatuses([])
+    } finally { setLoading(false) }
+  }
+
+  useEffect(() => { fetch() }, [])
+
+  const changeStatus = async (id: number, statusKey: string) => {
+    try {
+      await userConsultation.updateStatus(id, { status: statusKey })
+      await fetch()
+      alert('Cập nhật trạng thái thành công')
+    } catch (e: any) {
+      alert('Cập nhật thất bại: ' + (e?.response?.data?.message || e.message))
+    }
+  }
+
+  const formatDate = (dateStr: string) => {
+    if (!dateStr) return ''
+    const date = new Date(dateStr)
+    return date.toLocaleDateString('vi-VN')
+  }
+
+  return (
+    <div className="bg-gray-50 p-4 rounded">
+      <div className="flex items-center justify-between">
+        <h3 className="text-xl font-semibold text-gray-800">Quản lý yêu cầu khách hàng</h3>
+        <button onClick={fetch} className="px-3 py-1 bg-white border rounded hover:bg-gray-50">Làm mới</button>
+      </div>
+
+      {loading && <div className="text-gray-600 mt-4">Đang tải...</div>}
+
+      {!loading && list.length === 0 && <div className="text-gray-600 mt-4">Chưa có yêu cầu hỗ trợ</div>}
+
+      {!loading && list.length > 0 && (
+        <div className="grid gap-4 mt-4">
+          {list.map((item: any) => (
+            <div key={item.userConsultationId} className="bg-white border border-gray-200 p-4 rounded-lg shadow-sm">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="md:col-span-2">
+                  <div className="flex items-start gap-3">
+                    <div className="flex-1">
+                      <div className="font-semibold text-gray-900 text-lg">{item.guestName}</div>
+                      <div className="mt-1 space-y-1">
+                        <div className="text-sm text-gray-600">
+                          <span className="font-medium">SĐT:</span> {item.guestPhoneNumber}
+                        </div>
+                        <div className="text-sm text-gray-600">
+                          <span className="font-medium">Email:</span> {item.email}
+                        </div>
+                        <div className="text-sm text-gray-600">
+                          <span className="font-medium">Ngày tạo:</span> {formatDate(item.createDate)}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="flex flex-col gap-2">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Trạng thái hiện tại</label>
+                    <div className={`inline-block px-3 py-1 rounded text-sm font-medium ${
+                      item.status === 'NEW' ? 'bg-blue-100 text-blue-800' : 
+                      item.status === 'CONTACTED' ? 'bg-green-100 text-green-800' : 
+                      'bg-gray-100 text-gray-800'
+                    }`}>
+                      {item.status}
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Cập nhật trạng thái</label>
+                    <select 
+                      value={item.status || ''} 
+                      onChange={(e) => changeStatus(item.userConsultationId, e.target.value)} 
+                      className="w-full border border-gray-300 rounded p-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    >
+                      <option value="">-- Chọn trạng thái --</option>
+                      {statuses.map((s: any) => (
+                        <option key={s.status} value={s.status}>
+                          {s.status}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
+const AdminDashboard: React.FC = () => {
+  const tabs = [
+    { id: 'projects', label: 'Quản lý dự án' },
+    { id: 'support', label: 'Quản lý yêu cầu' },
+  ]
+  const [active, setActive] = useState('projects')
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      <AdminHeader />
+      <div className="max-w-7xl mx-auto p-6">
+        <div className="flex gap-2 mb-4">
+          {tabs.map((t) => (
+            <button
+              key={t.id}
+              onClick={() => setActive(t.id)}
+              className={`px-3 py-2 rounded ${active === t.id ? 'bg-gray-200' : 'bg-white border'}`}
+            >
+              {t.label}
+            </button>
+          ))}
+        </div>
+
+        <div>
+          {active === 'projects' && <ProjectsTab />}
+          {active === 'support' && <SupportTab />}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export default AdminDashboard

@@ -1,5 +1,4 @@
-// src/components/Footer.tsx
-import { Facebook, Twitter, Linkedin, Mail } from 'lucide-react';
+import { Facebook, Twitter, Linkedin, Mail, MapPin } from 'lucide-react';
 
 export default function Footer() {
   return (
@@ -10,11 +9,12 @@ export default function Footer() {
           <div>
             <h3 className="text-xl font-bold mb-4">Dịch vụ</h3>
             <ul className="text-blue-200 text-sm space-y-2">
-              <li><a href="#" className="hover:text-white transition">Tư vấn thiết kế</a></li>
-              <li><a href="#" className="hover:text-white transition">Thi công xây dựng</a></li>
-              <li><a href="#" className="hover:text-white transition">Quản lý dự án</a></li>
+              <li>Tư vấn thiết kế</li>
+              <li>Thi công xây dựng</li>
+              <li>Quản lý dự án</li>
             </ul>
           </div>
+
           <div>
             <h3 className="text-xl font-bold mb-4">Liên hệ</h3>
             <ul className="text-blue-200 text-sm space-y-2">
@@ -22,6 +22,21 @@ export default function Footer() {
               <li>Email: haodtc@gmail.com</li>
             </ul>
           </div>
+
+          <div>
+            <h3 className="text-xl font-bold mb-4">Địa chỉ</h3>
+            <ul className="text-blue-200 text-sm space-y-2">
+              <li>81/9 Dương Bạch Mai, P.Tam Hiệp, TP.Biên Hoà, Đồng Nai</li>
+              <li><a
+              href="https://maps.app.goo.gl/PWz1YFs5EN2iiqMa8"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 text-blue-300 hover:text-white transition">
+              <MapPin size={20} /> Xem trên Google Maps
+            </a></li>
+            </ul>
+          </div>
+
           <div>
             <h3 className="text-xl font-bold mb-4">Mạng xã hội</h3>
             <div className="flex gap-4">
@@ -31,6 +46,8 @@ export default function Footer() {
               <a href="#" className="hover:text-blue-300 transition"><Mail size={20} /></a>
             </div>
           </div>
+
+
         </div>
 
         <div className="border-t border-blue-800 pt-8 text-center text-blue-200 text-sm">
