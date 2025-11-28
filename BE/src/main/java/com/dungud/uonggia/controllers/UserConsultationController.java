@@ -21,7 +21,7 @@ public class UserConsultationController {
     public ApiResponse<Void> create(@RequestBody UserConsultationRequest userConsultation) {
         userConsultationService.create(userConsultation);
         return ApiResponse.<Void>builder()
-                .message("User consultation created successfully")
+                .message("gửi yêu cầu thành công")
                 .build();
     }
 
@@ -45,7 +45,7 @@ public class UserConsultationController {
     public ApiResponse<Void> updateStatus(@PathVariable Long id, @RequestBody StatusModel request){
         userConsultationService.updateStatus(id, request);
         return ApiResponse.<Void>builder()
-                .message("Status updated successfully")
+                .message("cập nhật trạng thái thành công")
                 .build();
     }
 }
