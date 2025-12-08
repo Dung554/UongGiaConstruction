@@ -2,6 +2,7 @@
 import { Menu, X } from 'lucide-react';
 import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import logoImg from '../assets/logo.png';
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
@@ -29,14 +30,16 @@ export default function Header() {
   };
 
   return (
-    <header className="bg-blue-900 text-white sticky top-0 z-50">
+    <header className="bg-blue-950 text-white sticky top-0 z-50">
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-        <div 
-          className="text-2xl font-bold cursor-pointer" 
-          onClick={() => navigate('/')}
-        >
-          Logo
-        </div>
+        <div className="cursor-pointer" onClick={() => navigate('/')}>
+  <img 
+    src={logoImg} 
+    alt="Logo" 
+    className="h-12 w-auto object-contain"
+  />
+</div>
+
         
         <button
           className="md:hidden"
