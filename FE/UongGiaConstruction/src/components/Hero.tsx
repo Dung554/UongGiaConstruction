@@ -40,7 +40,7 @@ export default function Hero() {
           </h2>
           
           <p className={`text-lg md:text-xl text-blue-50 mb-12 max-w-2xl mx-auto leading-relaxed ${isInView ? 'animate-fade-in-up delay-200' : 'opacity-0'}`}>
-          Uông Gia đồng hành cùng bạn kiến tạo không gian sống bền vững, nơi khởi nguồn của hạnh phúc và niềm tin.
+          Uông Gia đồng hành cùng bạn xây dựng tổ ấm bền vững với giải pháp tối ưu chi phí, đảm bảo chất lượng, nơi khởi nguồn của hạnh phúc và niềm tin.
           </p>
 
           <div className={`flex flex-col sm:flex-row gap-4 justify-center ${isInView ? 'animate-bounce-in delay-300' : 'opacity-0'}`}>
